@@ -1,0 +1,7 @@
+spring:
+  cassandra:
+    port: 9042
+    schema-action: CREATE_IF_NOT_EXISTS
+    contact-points: cassandra
+    local-datacenter: datacenter1
+    keyspace-name: myinbox
