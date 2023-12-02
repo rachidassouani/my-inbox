@@ -6,9 +6,11 @@ services:
     container_name: myinbox-cassandra
     ports:
       - "9042:9042"
+
+
     volumes:
-      - cassandra-data:/var/lib/cassandra
+      - data-cassandra:/var/lib/cassandra
 
 volumes:
-  cassandra-data:
+  data-cassandra:
     driver: local

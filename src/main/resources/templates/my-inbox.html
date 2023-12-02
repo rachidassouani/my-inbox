@@ -73,6 +73,22 @@
 
     <main>
         <p>Email list</p>
+        <div class="card" th:if="${emailList}">
+            <div class="card-header">Inbox</div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a th:each="email : ${emailList}"
+                       href="#" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1"
+                                th:text="${email.subject}">Subject</h5>
+                            <small th:text="${email.agoTimeString}"></small>
+                        </div>
+                        <!--<p class="mb-1"><span>From: </span><span th:text="${email.from}">Sender</span></p>-->
+                    </a>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer>

@@ -1,7 +1,15 @@
 spring:
   cassandra:
     port: 9042
-    schema-action: CREATE_IF_NOT_EXISTS
+    schema-action: RECREATE
     contact-points: cassandra
     local-datacenter: datacenter1
     keyspace-name: myinbox
+
+
+    connection:
+      connect-timeout: PT20S
+      init-query-timeout: PT30S
+
+    request:
+      timeout: PT20S
