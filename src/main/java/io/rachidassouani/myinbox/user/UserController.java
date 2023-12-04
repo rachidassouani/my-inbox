@@ -10,7 +10,9 @@ import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
@@ -29,7 +31,7 @@ public class UserController {
     private EmailListItemRepository emailListItemRepository;
 
     @GetMapping("/")
-    public String homePage(Model model) {
+    public String homePage(@RequestParam(required = false) String folder,  Model model) {
         // get user folders
         String userId = "rachid@gmail.com";
         List<Folder> userFolders = folderRepository.findAllByUserId(userId);
@@ -40,10 +42,12 @@ public class UserController {
         model.addAttribute("defaultFolders", defaultFolders);
 
         // get emails
-        String folderLabel = "Inbox";
+        if (!StringUtils.hasText(folder)) {
+            folder = "Inbox";
+        }
 
         List<EmailListItem> emailList = emailListItemRepository
-                .findAllById_UserIdAndId_Label("rachid@gmail.com", folderLabel);
+                .findAllById_UserIdAndId_Label("rachid@gmail.com", folder);
 
         PrettyTime prettyTime = new PrettyTime();
         emailList.stream().forEach(emailItem -> {
@@ -52,6 +56,7 @@ public class UserController {
             emailItem.setAgoTimeString(prettyTime.format(emailDateTime));
         });
         model.addAttribute("emailList", emailList);
+        model.addAttribute("folderName", folder);
 
         return "my-inbox";
     }

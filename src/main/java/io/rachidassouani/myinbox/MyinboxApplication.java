@@ -1,6 +1,8 @@
 package io.rachidassouani.myinbox;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
+import io.rachidassouani.myinbox.email.Email;
+import io.rachidassouani.myinbox.email.EmailRepository;
 import io.rachidassouani.myinbox.emaillist.EmailListItem;
 import io.rachidassouani.myinbox.emaillist.EmailListItemKey;
 import io.rachidassouani.myinbox.emaillist.EmailListItemRepository;
@@ -12,7 +14,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class MyinboxApplication {
@@ -23,6 +24,8 @@ public class MyinboxApplication {
 	@Autowired
 	private EmailListItemRepository emailListItemRepository;
 
+	@Autowired
+	private EmailRepository emailRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MyinboxApplication.class, args);
@@ -44,10 +47,17 @@ public class MyinboxApplication {
 			EmailListItem emailListItem = new EmailListItem();
 			emailListItem.setId(key);
 			emailListItem.setTo(Arrays.asList("rachid@gmail.com"));
-			emailListItem.setSubject("test");
+			emailListItem.setSubject("Subject Test : "+i);
 			emailListItem.setUnread(true);
-
 			emailListItemRepository.save(emailListItem);
+
+			Email email = new Email();
+			email.setId(key.getTimeUUID());
+			email.setFrom("rachid@gmail.com");
+			email.setTo(emailListItem.getTo());
+			email.setSubject(emailListItem.getSubject());
+			email.setBody("Body "+i);
+			emailRepository.save(email);
 		}
 	}
 }
